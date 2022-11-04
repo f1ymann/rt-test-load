@@ -1,0 +1,36 @@
+#сборка библиотеки rt3 Editor
+project(editor)
+
+set (app_HEADERS
+	blueprints.h
+	editor.h
+	node.h
+	tree.h
+	toolstrip.h
+	schemeEditor.h
+	utilities/builders.h
+    utilities/drawing.h
+    utilities/widgets.h
+	texturesLoader.h
+   )
+
+set (app_SOURCES
+	blueprints.cpp
+	editor.cpp
+	tree.cpp
+	toolstrip.cpp
+	schemeEditor.cpp
+    utilities/builders.cpp
+    utilities/drawing.cpp
+    utilities/widgets.cpp
+	texturesLoader.cpp
+   )
+
+add_library(${PROJECT_NAME} ${app_HEADERS} ${app_SOURCES} )
+add_library(rt3::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
+target_link_libraries(${PROJECT_NAME} rt3::app 3rdParty::imgui_node_editor 3rdParty::stb_image)
+		     
+target_include_directories( ${PROJECT_NAME}
+	PUBLIC ${PROJECT_SOURCE_DIR}
+)

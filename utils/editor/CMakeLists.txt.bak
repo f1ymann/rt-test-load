@@ -1,0 +1,42 @@
+cmake_minimum_required(VERSION 3.7.2)
+
+project(rt3Editor)
+
+set(EDITOR_HEADERS
+)
+
+set(EDITOR_SOURCES
+	main.cpp
+)
+
+add_executable(${PROJECT_NAME} ${EDITOR_HEADERS} ${EDITOR_SOURCES})
+
+target_link_libraries(${PROJECT_NAME}
+			rt3::editor
+		      )
+
+	if(MSVC)
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Data $<TARGET_FILE_DIR:${PROJECT_NAME}>/../Data
+)
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}/devLib/ $<TARGET_FILE_DIR:${PROJECT_NAME}>/../devLib)
+else()
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Data $<TARGET_FILE_DIR:${PROJECT_NAME}>/Data
+)
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}/devLib/ $<TARGET_FILE_DIR:${PROJECT_NAME}>/devLib)
+endif()	
+		
+install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(DIRECTORY Data DESTINATION ${CMAKE_INSTALL_PREFIX})
+
